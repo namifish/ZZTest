@@ -193,14 +193,14 @@ def delete_user_from_github(username):
     try:
         db_file = repo.get_contents(db_path)
         local_db_path = "zellzaehler_temp.db"
-        with open(local_db_path, "wb") as file):
+        with open(local_db_path, "wb") as file:
             file.write(db_file.decoded_content)
         conn = sqlite3.connect(local_db_path)
         c = conn.cursor()
         c.execute('DELETE FROM results WHERE username=?', (username,))
         conn.commit()
         conn.close()
-        with open(local_db_path, "rb") as file):
+        with open(local_db_path, "rb") as file:
             new_db_data = file.read()
         repo.update_file(db_path, "Deleted user data", new_db_data.decode('latin1'), db_file.sha)
         os.remove(local_db_path)
