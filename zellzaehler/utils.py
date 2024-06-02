@@ -36,6 +36,9 @@ def set_background(png_file):
 
 def init_db():
     try:
+        # Überprüfen, ob der Pfad korrekt ist und die Datei vorhanden ist
+        st.write(f"Initializing database at: {DB_FILE}")
+
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS results (
@@ -43,12 +46,29 @@ def init_db():
                     sample_number TEXT,
                     count_session INTEGER,
                     date TEXT,
-                    counts TEXT,
-                    FOREIGN KEY(username) REFERENCES users(username)
+                    counts TEXT
                   )''')
         conn.commit()
+        st.write("Database initialized successfully")
     except sqlite3.DatabaseError as e:
-        st.error(f"Database error: {e}")
+        # Bei einem Fehler die beschädigte Datei löschen und neu erstellen
+        if "malformed" in str(e):
+            st.write("Database is malformed, recreating...")
+            if os.path.exists(DB_FILE):
+                os.remove(DB_FILE)
+            conn = sqlite3.connect(DB_FILE)
+            c = conn.cursor()
+            c.execute('''CREATE TABLE IF NOT EXISTS results (
+                        username TEXT,
+                        sample_number TEXT,
+                        count_session INTEGER,
+                        date TEXT,
+                        counts TEXT
+                      )''')
+            conn.commit()
+            st.write("Database recreated successfully")
+        else:
+            st.error(f"Database error: {e}")
     finally:
         conn.close()
 
@@ -173,14 +193,14 @@ def delete_user_from_github(username):
     try:
         db_file = repo.get_contents(db_path)
         local_db_path = "zellzaehler_temp.db"
-        with open(local_db_path, "wb") as file:
+        with open(local_db_path, "wb") as file):
             file.write(db_file.decoded_content)
         conn = sqlite3.connect(local_db_path)
         c = conn.cursor()
         c.execute('DELETE FROM results WHERE username=?', (username,))
         conn.commit()
         conn.close()
-        with open(local_db_path, "rb") as file:
+        with open(local_db_path, "rb") as file):
             new_db_data = file.read()
         repo.update_file(db_path, "Deleted user data", new_db_data.decode('latin1'), db_file.sha)
         os.remove(local_db_path)
@@ -294,10 +314,3 @@ def save_results(button_names):
     else:
         st.session_state['count_session'] += 1
     reset_counts(button_names)
-
-if st.session_state['count_session'] == 2:
-    if st.button("Zählung beenden & archivieren", help="Die gespeicherten Ergebnisse sind im Archiv sichtbar.", use_container_width=True):
-        if total_count == 100:
-            save_results(button_names)
-            upload_to_github(DB_FILE, repo, 'zellzaehler/data/zellzaehler.db')
-            upload_to_github(LOGIN_FILE, repo, 'zellzaehler/data/login_hashed_password_list.csv')
