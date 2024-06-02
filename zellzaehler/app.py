@@ -12,7 +12,7 @@ utils.init_db()
 utils.init_user_data()
 
 st.title("ZellZähler")
-utils.set_background('images/hintergrundtransparent.png')
+utils.set_background('zellzaehler/images/hintergrundtransparent.png')
 
 # Initialisiere Session-States, falls sie nicht existieren
 if 'authenticated' not in st.session_state:
