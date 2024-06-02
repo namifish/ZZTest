@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import utils
+import zellzaehler.utils as utils
 from datetime import datetime
 
 def introduction():
