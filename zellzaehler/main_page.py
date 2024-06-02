@@ -38,10 +38,7 @@ def introduction():
 
         Diese App wurde für das Hämatologie Praktikum an der ZHAW erschaffen. Sie hilft beim Differenzieren des weissen Blutbildes. Entwickelt von Sarah 'Viki' Ramos Zähnler und Lucia Schweizer. Die Illustration ist von Sarah 'Viki' Ramos Zähnler.
         """)
-
-utils.init_db()
-utils.init_user_data()
-
+        
 button_names = [
     "Pro   ", "Mye   ", "Meta   ", "Stab   ", "Seg   ", "Eos   ",
     "Baso   ", "Mono   ", "Ly   ", "Div1   ", "Div2   ", "Div3   "
