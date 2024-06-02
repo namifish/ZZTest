@@ -16,11 +16,11 @@ DB_FILE = 'zellzaehler.db'
 # GitHub repository details
 GITHUB_TOKEN = st.secrets["github"]["token"]
 GITHUB_REPO = st.secrets["github"]["repo"]
-GITHUB_PATH = "path/to/save/data/on/github"  # Change this to the path where you want to save the data in your repo
+GITHUB_OWNER = st.secrets["github"]["owner"]
 
 # Initialize GitHub connection
 github = Github(GITHUB_TOKEN)
-repo = github.get_repo(GITHUB_REPO)
+repo = github.get_repo(f"{GITHUB_OWNER}/{GITHUB_REPO}")
 
 st.set_page_config(page_title="ZellZähler", page_icon="🔬")
 
