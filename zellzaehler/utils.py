@@ -8,8 +8,8 @@ from datetime import datetime
 from github import Github
 import streamlit as st
 
-LOGIN_FILE = "data/login_hashed_password_list.csv"
-DB_FILE = "data/zellzaehler.db"
+LOGIN_FILE = "zellzaehler/data/login_hashed_password_list.csv"
+DB_FILE = "zellzaehler/data/zellzaehler.db"
 
 # GitHub repository details
 GITHUB_TOKEN = st.secrets["github"]["token"]
