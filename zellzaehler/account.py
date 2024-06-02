@@ -33,6 +33,12 @@ def manage_account():
                 time.sleep(2)
                 st.rerun()
 
+        with grid_columns[2]:
+            if st.button("Daten auf Datenbank absichern", key="upload_to_github_button"):
+                utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
+                utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
+                st.success("Daten erfolgreich auf GitHub abgesichert.")
+                
         # Passwort ändern
         if 'change_password' in st.session_state and st.session_state['change_password']:
             new_password = st.text_input("Neues Passwort", type="password", key="new_password")
@@ -97,8 +103,3 @@ def manage_account():
                 st.rerun()
             if st.button("Abbrechen", key="cancel_delete_account"):
                 st.session_state['delete_account'] = False
-
-if st.button("Daten auf Datenbank absichern", key="upload_to_github_button"):
-    utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
-    utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
-    st.success("Daten erfolgreich auf GitHub abgesichert.")
