@@ -45,7 +45,6 @@ button_names = [
 ]
 
 def counting():
-
     # Initialisieren der Session-States
     if 'history' not in st.session_state:
         st.session_state['history'] = []
@@ -75,7 +74,6 @@ def counting():
         st.warning("Bitte gib eine Probenummer ein, um zu beginnen.")
         if st.session_state['guest']:
             st.warning("Archivierte Daten im Gästelogin können verlorengehen.")
-            
     else:
         st.subheader(f"Aktuelle Zählungssession: {st.session_state['count_session']}")
 
@@ -163,6 +161,7 @@ def counting():
             if st.session_state['count_session'] == 1:
                 if st.button("Speichern & weiter zur 2. Zählung", use_container_width=True):
                     if total_count == 100:
+                        st.write("Speichern der Ergebnisse für die 1. Zählung...")
                         utils.save_results(button_names)
                         utils.reset_counts(button_names)
                         st.session_state['count_session'] = 2
@@ -172,8 +171,11 @@ def counting():
             if st.session_state['count_session'] == 2:
                 if st.button("Zählung beenden & archivieren", help="Die gespeicherten Ergebnisse sind im Archiv sichtbar.", use_container_width=True):
                     if total_count == 100:
+                        st.write("Speichern der Ergebnisse für die 2. Zählung und Archivierung...")
                         utils.save_results(button_names)
+                        st.write("Hochladen der Datenbankdatei auf GitHub...")
                         utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
+                        st.write("Hochladen der Login-Datei auf GitHub...")
                         utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
                         utils.reset_counts(button_names)
                         st.session_state['count_session'] = 1
