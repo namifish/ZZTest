@@ -3,9 +3,6 @@ import pandas as pd
 import utils
 from datetime import datetime
 
-utils.init_db()
-utils.init_user_data()
-
 def introduction():
     if st.session_state['guest']:
         st.header("Einführung")
@@ -41,6 +38,9 @@ def introduction():
 
         Diese App wurde für das Hämatologie Praktikum an der ZHAW erschaffen. Sie hilft beim Differenzieren des weissen Blutbildes. Entwickelt von Sarah 'Viki' Ramos Zähnler und Lucia Schweizer. Die Illustration ist von Sarah 'Viki' Ramos Zähnler.
         """)
+
+utils.init_db()
+utils.init_user_data()
 
 button_names = [
     "Pro   ", "Mye   ", "Meta   ", "Stab   ", "Seg   ", "Eos   ",
