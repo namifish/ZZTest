@@ -168,8 +168,11 @@ def counting():
                         st.error("Die Gesamtzahl der Zellen muss 100 betragen.")
         
             if st.session_state['count_session'] == 2:
+                st.write("In der count_session == 2 Bedingung")
                 if st.button("Zählung beenden & archivieren", help="Die gespeicherten Ergebnisse sind im Archiv sichtbar.", use_container_width=True):
+                    st.write("Button 'Zählung beenden & archivieren' geklickt")
                     if total_count == 100:
+                        st.write("Total count ist 100")
                         utils.save_results(button_names)
                         st.write("Speichern abgeschlossen, beginne Upload...")
                         utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
