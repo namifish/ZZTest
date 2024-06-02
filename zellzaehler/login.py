@@ -1,4 +1,4 @@
-import streamlit as st
+limport streamlit as st
 import utils
 import time
 
@@ -45,7 +45,7 @@ def show_register():
             if reg_username and reg_password and reg_confirm_password:
                 if reg_password == reg_confirm_password:
                     if utils.register_user(reg_username, reg_password):
-                        utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'login_hashed_password_list.csv')
+                        utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
                         st.success("Registrierung erfolgreich. Du kannst dich jetzt einloggen.")
                         st.session_state['register'] = False
                         time.sleep(2)
