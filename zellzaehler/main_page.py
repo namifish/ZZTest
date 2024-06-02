@@ -157,23 +157,26 @@ def counting():
                 utils.reset_counts(button_names)
                 st.rerun()
 
-        with bottom_columns[2]:
-            if st.session_state['count_session'] == 1:
-                if st.button("Speichern & weiter zur 2. Zählung", use_container_width=True):
-                    if total_count == 100:
-                        utils.save_results(button_names)
-                        utils.reset_counts(button_names)
-                        st.session_state['count_session'] = 2
-                    else:
-                        st.error("Die Gesamtzahl der Zellen muss 100 betragen.")
-        
-            if st.session_state['count_session'] == 2:
-                if st.button("Zählung beenden & archivieren", help="Die gespeicherten Ergebnisse sind im Archiv sichtbar.", use_container_width=True):
-                    if total_count == 100:
-                        utils.save_results(button_names)
-                        utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
-                        utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
-                        utils.reset_counts(button_names)
-                        st.session_state['count_session'] = 1
-                    else:
-                        st.error("Die Gesamtzahl der Zellen muss 100 betragen.")
+       with bottom_columns[2]:
+        if st.session_state['count_session'] == 1:
+            if st.button("Speichern & weiter zur 2. Zählung", use_container_width=True):
+                if total_count == 100:
+                    utils.save_results(button_names)
+                    utils.reset_counts(button_names)
+                    st.session_state['count_session'] = 2
+                else:
+                    st.error("Die Gesamtzahl der Zellen muss 100 betragen.")
+    
+        if st.session_state['count_session'] == 2:
+            if st.button("Zählung beenden & archivieren", help="Die gespeicherten Ergebnisse sind im Archiv sichtbar.", use_container_width=True):
+                if total_count == 100:
+                    utils.save_results(button_names)
+                    st.write("Speichern abgeschlossen, beginne Upload...")
+                    utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
+                    st.write("DB hochgeladen")
+                    utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
+                    st.write("Login-Datei hochgeladen")
+                    utils.reset_counts(button_names)
+                    st.session_state['count_session'] = 1
+                else:
+                    st.error("Die Gesamtzahl der Zellen muss 100 betragen.")
