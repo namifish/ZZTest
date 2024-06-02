@@ -97,3 +97,8 @@ def manage_account():
                 st.rerun()
             if st.button("Abbrechen", key="cancel_delete_account"):
                 st.session_state['delete_account'] = False
+
+if st.button("Daten auf Datenbank absichern", key="upload_to_github_button"):
+    utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
+    utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
+    st.success("Daten erfolgreich auf GitHub abgesichert.")
