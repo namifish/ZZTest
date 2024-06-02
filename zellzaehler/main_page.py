@@ -3,6 +3,9 @@ import pandas as pd
 import utils
 from datetime import datetime
 
+utils.init_db()
+utils.init_user_data()
+
 def introduction():
     if st.session_state['guest']:
         st.header("Einführung")
