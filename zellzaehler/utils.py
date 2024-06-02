@@ -37,8 +37,6 @@ def set_background(png_file):
 def init_db():
     try:
         # Überprüfen, ob der Pfad korrekt ist und die Datei vorhanden ist
-        st.write(f"Initializing database at: {DB_FILE}")
-
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS results (
@@ -49,11 +47,9 @@ def init_db():
                     counts TEXT
                   )''')
         conn.commit()
-        st.write("Database initialized successfully")
     except sqlite3.DatabaseError as e:
         # Bei einem Fehler die beschädigte Datei löschen und neu erstellen
         if "malformed" in str(e):
-            st.write("Database is malformed, recreating...")
             if os.path.exists(DB_FILE):
                 os.remove(DB_FILE)
             conn = sqlite3.connect(DB_FILE)
@@ -66,7 +62,6 @@ def init_db():
                         counts TEXT
                       )''')
             conn.commit()
-            st.write("Database recreated successfully")
         else:
             st.error(f"Database error: {e}")
     finally:
