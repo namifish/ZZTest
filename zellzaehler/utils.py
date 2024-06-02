@@ -35,18 +35,22 @@ def set_background(png_file):
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
 def init_db():
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS results (
-                username TEXT,
-                sample_number TEXT,
-                count_session INTEGER,
-                date TEXT,
-                counts TEXT,
-                FOREIGN KEY(username) REFERENCES users(username)
-              )''')
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS results (
+                    username TEXT,
+                    sample_number TEXT,
+                    count_session INTEGER,
+                    date TEXT,
+                    counts TEXT,
+                    FOREIGN KEY(username) REFERENCES users(username)
+                  )''')
+        conn.commit()
+    except sqlite3.DatabaseError as e:
+        st.error(f"Database error: {e}")
+    finally:
+        conn.close()
 
 def init_user_data():
     if not os.path.exists(LOGIN_FILE):
@@ -90,29 +94,42 @@ def delete_user(username):
     users = users[users['username'] != username]
     save_user_data(users)
 
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    c.execute('DELETE FROM results WHERE username=?', (username,))
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute('DELETE FROM results WHERE username=?', (username,))
+        conn.commit()
+    except sqlite3.DatabaseError as e:
+        st.error(f"Database error: {e}")
+    finally:
+        conn.close()
 
     delete_user_from_github(username)
 
 def save_user_results(username, sample_number, count_session, date_time, current_counts):
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    counts_str = ','.join(f'{key}:{value}' for key, value in current_counts.items())
-    c.execute('''INSERT INTO results (username, sample_number, count_session, date, counts)
-                 VALUES (?, ?, ?, ?, ?)''', (username, sample_number, count_session, date_time, counts_str))
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        counts_str = ','.join(f'{key}:{value}' for key, value in current_counts.items())
+        c.execute('''INSERT INTO results (username, sample_number, count_session, date, counts)
+                     VALUES (?, ?, ?, ?, ?)''', (username, sample_number, count_session, date_time, counts_str))
+        conn.commit()
+    except sqlite3.DatabaseError as e:
+        st.error(f"Database error: {e}")
+    finally:
+        conn.close()
 
 def get_user_results(username):
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    c.execute('SELECT sample_number, count_session, date, counts FROM results WHERE username=?', (username,))
-    results = c.fetchall()
-    conn.close()
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute('SELECT sample_number, count_session, date, counts FROM results WHERE username=?', (username,))
+        results = c.fetchall()
+    except sqlite3.DatabaseError as e:
+        st.error(f"Database error: {e}")
+        results = []
+    finally:
+        conn.close()
     return results
 
 def to_excel(df):
@@ -277,3 +294,10 @@ def save_results(button_names):
     else:
         st.session_state['count_session'] += 1
     reset_counts(button_names)
+
+if st.session_state['count_session'] == 2:
+    if st.button("Zählung beenden & archivieren", help="Die gespeicherten Ergebnisse sind im Archiv sichtbar.", use_container_width=True):
+        if total_count == 100:
+            save_results(button_names)
+            upload_to_github(DB_FILE, repo, 'zellzaehler/data/zellzaehler.db')
+            upload_to_github(LOGIN_FILE, repo, 'zellzaehler/data/login_hashed_password_list.csv')
