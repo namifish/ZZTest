@@ -1,9 +1,9 @@
 import streamlit as st
-import zellzaehler.login as login
-import zellzaehler.main_page as main_page
-import zellzaehler.archive as archive
-import zellzaehler.account as account
-import zellzaehler.utils as utils
+import login
+import main_page
+import archive
+import account
+import utils
 
 st.set_page_config(page_title="ZellZähler", page_icon="🔬")
 
