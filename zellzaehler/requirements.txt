@@ -9,4 +9,4 @@ urllib3==2.2.1
 watchdog==4.0.0
 wrapt==1.16.0
 XlsxWriter==3.2.0
-byrypt
+bcrypt
