@@ -1,5 +1,5 @@
 import streamlit as st
-import zellzaehler.utils as utils
+import utils
 import time
 
 def show_login():
