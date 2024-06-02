@@ -1,5 +1,5 @@
 import streamlit as st
-import utils
+import zellzaehler.utils as utils
 
 def show_archive():
     st.header("Archivierte Ergebnisse")
