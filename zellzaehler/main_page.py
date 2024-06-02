@@ -57,7 +57,7 @@ def counting():
         st.session_state['count_session'] = 1
 
     if 'custom_names' not in st.session_state:
-        st.session_state['custom_names'] = ["Div1", "Div2", "Div3"]
+        st.session_state['custom_names'] = ["Div1   ", "Div2   ", "Div3   "]
 
     for name in button_names:
         if f'count_{name}' not in st.session_state:
