@@ -82,7 +82,7 @@ def register_user(username, password):
     new_user = pd.DataFrame([[username, encrypt_password(password)]], columns=['username', 'password'])
     users = pd.concat([users, new_user], ignore_index=True)
     save_user_data(users)
-    upload_to_github(LOGIN_FILE, repo, 'login_hashed_password_list.csv')
+    upload_to_github(LOGIN_FILE, repo, 'zellzaehler/data/login_hashed_password_list.csv')
     return True
 
 def delete_user(username):
@@ -140,7 +140,7 @@ def delete_from_github(repo, github_path):
 
 def delete_user_from_github(username):
     # Delete user data from login file
-    login_path = 'login_hashed_password_list.csv'
+    login_path = 'zellzaehler/data/login_hashed_password_list.csv'
     try:
         login_file = repo.get_contents(login_path)
         login_data = login_file.decoded_content.decode()
@@ -152,7 +152,7 @@ def delete_user_from_github(username):
         print(f"Error updating {login_path} on GitHub: {e}")
 
     # Delete user data from database file
-    db_path = 'zellzaehler.db'
+    db_path = 'zellzaehler/data/zellzaehler.db'
     try:
         db_file = repo.get_contents(db_path)
         local_db_path = "zellzaehler_temp.db"
