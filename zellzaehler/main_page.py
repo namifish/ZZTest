@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import utils
+import sqlite3
 from datetime import datetime
 
 def introduction():
@@ -181,6 +182,6 @@ def counting():
                         if upload_success:
                             utils.reset_counts(button_names)
                             st.session_state['count_session'] = 1
-                            st.experimental_rerun()  # Erneut ausführen, um die UI zu aktualisieren
+                            st.rerun()  # Erneut ausführen, um die UI zu aktualisieren
                     else:
                         st.error("Die Gesamtzahl der Zellen muss 100 betragen.")
