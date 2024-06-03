@@ -172,6 +172,7 @@ def counting():
                 if st.button("Zählung beenden & archivieren", help="Die gespeicherten Ergebnisse sind im Archiv sichtbar.", use_container_width=True):
                     if total_count == 100:
                         utils.save_results(button_names)
+                        st.session_state['count_session'] = 2
                         try:
                             utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
                             utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
