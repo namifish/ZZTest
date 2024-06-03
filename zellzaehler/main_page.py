@@ -168,18 +168,19 @@ def counting():
                         st.error("Die Gesamtzahl der Zellen muss 100 betragen.")
         
             if st.session_state['count_session'] == 2:
-                st.write("In der count_session == 2 Bedingung")
                 if st.button("Zählung beenden & archivieren", help="Die gespeicherten Ergebnisse sind im Archiv sichtbar.", use_container_width=True):
-                    st.write("Button 'Zählung beenden & archivieren' geklickt")
                     if total_count == 100:
-                        st.write("Total count ist 100")
                         utils.save_results(button_names)
-                        st.write("Speichern abgeschlossen, beginne Upload...")
-                        utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
-                        st.write("DB hochgeladen")
-                        utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
-                        st.write("Login-Datei hochgeladen")
-                        utils.reset_counts(button_names)
-                        st.session_state['count_session'] = 1
+                        try:
+                            utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
+                            utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
+                            upload_success = True
+                        except Exception as e:
+                            upload_success = False
+                        
+                        if upload_success:
+                            utils.reset_counts(button_names)
+                            st.session_state['count_session'] = 1
+                            st.experimental_rerun()  # Erneut ausführen, um die UI zu aktualisieren
                     else:
                         st.error("Die Gesamtzahl der Zellen muss 100 betragen.")
