@@ -157,11 +157,6 @@ def counting():
             if st.button('Zählung zurücksetzen', help="Setzt alle Zählerstände wieder auf null.", use_container_width=True):
                 utils.reset_counts(button_names)
                 st.rerun()
-        with bottom_columns[1]:
-            if st.button("Daten auf Datenbank absichern", key="upload_to_github_button"):
-                utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
-                utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
-                st.success("Daten erfolgreich auf GitHub abgesichert.")
                 
         with bottom_columns[2]:
             if st.session_state['count_session'] == 1:
@@ -180,6 +175,7 @@ def counting():
                         try:
                             utils.upload_to_github(utils.DB_FILE, utils.repo, 'zellzaehler/data/zellzaehler.db')
                             utils.upload_to_github(utils.LOGIN_FILE, utils.repo, 'zellzaehler/data/login_hashed_password_list.csv')
+                            st.success("Daten erfolgreich auf GitHub abgesichert.")
                             upload_success = True
                         except Exception as e:
                             upload_success = False
